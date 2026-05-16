@@ -1,0 +1,114 @@
+/* ===== GLOBAL RESET ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+/* ===== PAGE BACKGROUND ===== */
+.auth-page {
+  background: linear-gradient(135deg, #1da1f2, #14171a);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ===== AUTH CONTAINER ===== */
+.auth-container {
+  background: #ffffff;
+  width: 360px;
+  padding: 30px 25px;
+  border-radius: 14px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+  animation: fadeIn 0.6s ease;
+}
+
+/* ===== TITLE ===== */
+.auth-container h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 26px;
+  font-weight: 700;
+  color: #14171a;
+}
+
+/* ===== FORM ===== */
+.auth-container form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* ===== INPUTS ===== */
+.auth-container input {
+  padding: 12px 14px;
+  border-radius: 8px;
+  border: 1px solid #ccd6dd;
+  font-size: 15px;
+  transition: all 0.2s ease;
+}
+
+.auth-container input:focus {
+  outline: none;
+  border-color: #1da1f2;
+  box-shadow: 0 0 0 2px rgba(29, 161, 242, 0.15);
+}
+
+/* ===== BUTTON ===== */
+.auth-container button {
+  margin-top: 8px;
+  padding: 12px;
+  background: #1da1f2;
+  color: #ffffff;
+  border: none;
+  border-radius: 999px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.1s ease;
+}
+
+.auth-container button:hover {
+  background: #1a91da;
+}
+
+.auth-container button:active {
+  transform: scale(0.97);
+}
+
+/* ===== ERROR TEXT ===== */
+.auth-error {
+  color: #e0245e;
+  font-size: 14px;
+  text-align: center;
+  margin-top: 8px;
+}
+
+/* ===== LINK ===== */
+.auth-container a {
+  display: block;
+  margin-top: 16px;
+  text-align: center;
+  color: #1da1f2;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.auth-container a:hover {
+  text-decoration: underline;
+}
+
+/* ===== ANIMATION ===== */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

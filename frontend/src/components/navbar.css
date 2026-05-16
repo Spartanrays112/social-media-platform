@@ -1,0 +1,118 @@
+:root {
+  --navbar-height: 60px;
+  --navbar-bg: #18e3f2;
+}
+
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: var(--navbar-height);
+  background: var(--navbar-bg);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  z-index: 1000;
+}
+
+/* Brand */
+.navbar h3 {
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+/* Search wrapper to position dropdown */
+.search-wrapper {
+  position: relative;
+  flex: 1;
+  max-width: 300px;
+  margin: 0 20px;
+}
+
+/* Search input */
+.navbar input {
+  width: 100%;
+  padding: 8px 14px;
+  border-radius: 20px;
+  border: none;
+  outline: none;
+}
+
+/* Logout button */
+.navbar button {
+  background: transparent;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+/* Dropdown */
+.search-dropdown {
+  position: absolute;
+  top: 42px;
+  left: 0;
+  right: 0;
+  max-height: 200px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  z-index: 999;
+}
+
+.search-item {
+  padding: 8px 12px;
+  cursor: pointer;
+  color: #333;
+  white-space: nowrap;
+}
+
+.search-item:hover {
+  background: #f0f2f5;
+}
+
+/* ================= RESPONSIVE NAVBAR ================= */
+@media (max-width: 768px) {
+  :root {
+    --navbar-height: 120px;
+  }
+
+  .navbar {
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: center;
+    gap: 10px;
+    padding: 10px 16px;
+    height: var(--navbar-height);
+  }
+
+  .navbar h3 {
+    text-align: center;
+  }
+
+  .search-wrapper {
+    max-width: 100%;
+  }
+
+  .navbar button {
+    align-self: flex-end;
+  }
+}
+
+@media (max-width: 480px) {
+  :root {
+    --navbar-height: 140px;
+  }
+
+  .navbar h3 {
+    font-size: 18px;
+  }
+
+  .navbar button {
+    font-size: 14px;
+  }
+}

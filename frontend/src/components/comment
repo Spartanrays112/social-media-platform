@@ -1,0 +1,321 @@
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import axios from "axios";
+import MainLayout from "../layouts/MainLayout";
+import "./Profile.css";
+
+const Profile = () => {
+  const { id } = useParams(); // undefined = own profile
+  const [profile, setProfile] = useState(null);
+  const [counts, setCounts] = useState({ followers: 0, following: 0 });
+  const [posts, setPosts] = useState([]);
+
+  const [caption, setCaption] = useState("");
+  const [image, setImage] = useState(null);
+  const [profileImage, setProfileImage] = useState(null);
+
+  const [commentsMap, setCommentsMap] = useState({});
+  const [commentTextMap, setCommentTextMap] = useState({});
+  const [openComments, setOpenComments] = useState({});
+  const [editingComment, setEditingComment] = useState({}); // { [commentId]: true/false }
+  const [editTextMap, setEditTextMap] = useState({}); // { [commentId]: "text" }
+
+  const [deletePostId, setDeletePostId] = useState(null);
+
+  const token = localStorage.getItem("token");
+  const headers = { Authorization: `Bearer ${token}` };
+  const userId = JSON.parse(atob(token.split(".")[1])).id;
+
+  const isOwnProfile = !id;
+
+  /* ================= FETCH DATA ================= */
+  const fetchData = async () => {
+    try {
+      // Profile info
+      const profileRes = await axios.get(
+        `http://localhost:5000/api/user/profile${id ? `?id=${id}` : ""}`,
+        { headers }
+      );
+      setProfile(profileRes.data);
+
+      // Follower counts
+      if (isOwnProfile) {
+        const countRes = await axios.get(
+          "http://localhost:5000/api/user/follow-count",
+          { headers }
+        );
+        setCounts(countRes.data);
+      }
+
+      // Posts
+      const postsRes = await axios.get("http://localhost:5000/api/posts", { headers });
+      const userPosts = postsRes.data.filter((p) => p.user_id === profileRes.data.id);
+      setPosts(userPosts);
+
+      // Initialize comments state
+      const initComments = {};
+      const initOpen = {};
+      const initCommentText = {};
+      const initEditText = {};
+      const initEditing = {};
+
+      userPosts.forEach((p) => {
+        initComments[p.id] = [];
+        initOpen[p.id] = false;
+        initCommentText[p.id] = "";
+      });
+
+      setCommentsMap(initComments);
+      setOpenComments(initOpen);
+      setCommentTextMap(initCommentText);
+      setEditTextMap(initEditText);
+      setEditingComment(initEditing);
+    } catch (err) {
+      console.error("PROFILE FETCH ERROR:", err);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, [id]);
+
+  /* ================= PROFILE IMAGE UPLOAD ================= */
+  const handleProfileImageUpload = async () => {
+    if (!profileImage) return;
+
+    const formData = new FormData();
+    formData.append("image", profileImage);
+
+    await axios.post("http://localhost:5000/api/user/profile-image", formData, { headers });
+
+    setProfileImage(null);
+    fetchData();
+  };
+
+  /* ================= CREATE POST ================= */
+  const handleCreatePost = async () => {
+    if (!caption && !image) return;
+
+    const formData = new FormData();
+    formData.append("caption", caption);
+    if (image) formData.append("image", image);
+
+    await axios.post("http://localhost:5000/api/posts", formData, { headers });
+
+    setCaption("");
+    setImage(null);
+    fetchData();
+  };
+
+  /* ================= LIKE ================= */
+  const handleLike = async (postId, liked) => {
+    await axios.post(
+      `http://localhost:5000/api/likes/${liked ? "unlike" : "like"}`,
+      { postId },
+      { headers }
+    );
+
+    setPosts((prev) =>
+      prev.map((p) =>
+        p.id === postId
+          ? { ...p, isLiked: liked ? 0 : 1, likeCount: liked ? p.likeCount - 1 : p.likeCount + 1 }
+          : p
+      )
+    );
+  };
+
+  /* ================= COMMENTS ================= */
+  const toggleComments = async (postId) => {
+    if (!openComments[postId]) {
+      const res = await axios.get(`http://localhost:5000/api/comments/${postId}`, { headers });
+      const editState = {};
+      const editTextState = {};
+      res.data.forEach((c) => {
+        editState[c.id] = false;
+        editTextState[c.id] = c.text;
+      });
+      setEditingComment((prev) => ({ ...prev, ...editState }));
+      setEditTextMap((prev) => ({ ...prev, ...editTextState }));
+      setCommentsMap((prev) => ({ ...prev, [postId]: res.data }));
+    }
+    setOpenComments((prev) => ({ ...prev, [postId]: !prev[postId] }));
+  };
+
+  const handleAddComment = async (postId) => {
+    const text = commentTextMap[postId];
+    if (!text.trim()) return;
+
+    await axios.post("http://localhost:5000/api/comments", { postId, comment: text }, { headers });
+
+    const res = await axios.get(`http://localhost:5000/api/comments/${postId}`, { headers });
+    const editState = {};
+    const editTextState = {};
+    res.data.forEach((c) => {
+      editState[c.id] = false;
+      editTextState[c.id] = c.text;
+    });
+    setEditingComment((prev) => ({ ...prev, ...editState }));
+    setEditTextMap((prev) => ({ ...prev, ...editTextState }));
+    setCommentsMap((prev) => ({ ...prev, [postId]: res.data }));
+    setCommentTextMap((prev) => ({ ...prev, [postId]: "" }));
+  };
+
+  const handleDeleteComment = async (commentId, postId) => {
+    await axios.delete(`http://localhost:5000/api/comments/${commentId}`, { headers });
+    // refresh comments
+    const res = await axios.get(`http://localhost:5000/api/comments/${postId}`, { headers });
+    setCommentsMap((prev) => ({ ...prev, [postId]: res.data }));
+  };
+
+  const handleEditComment = async (commentId, postId) => {
+    const text = editTextMap[commentId];
+    if (!text.trim()) return;
+
+    await axios.put(`http://localhost:5000/api/comments/${commentId}`, { comment: text }, { headers });
+
+    const res = await axios.get(`http://localhost:5000/api/comments/${postId}`, { headers });
+    const editState = {};
+    const editTextState = {};
+    res.data.forEach((c) => {
+      editState[c.id] = false;
+      editTextState[c.id] = c.text;
+    });
+    setEditingComment((prev) => ({ ...prev, ...editState }));
+    setEditTextMap((prev) => ({ ...prev, ...editTextState }));
+    setCommentsMap((prev) => ({ ...prev, [postId]: res.data }));
+  };
+
+  /* ================= DELETE POST ================= */
+  const handleDeletePost = async () => {
+    await axios.delete(`http://localhost:5000/api/posts/${deletePostId}`, { headers });
+    setPosts((prev) => prev.filter((p) => p.id !== deletePostId));
+    setDeletePostId(null);
+  };
+
+  if (!profile) return <p>Loading...</p>;
+
+  return (
+    <MainLayout>
+      <div className="profile-container">
+        {/* PROFILE HEADER */}
+        <div className="profile-header">
+          <div className="profile-avatar">
+            {profile.profile_image ? (
+              <img src={`http://localhost:5000/uploads/${profile.profile_image}`} alt="profile" />
+            ) : (
+              profile.name.charAt(0).toUpperCase()
+            )}
+          </div>
+
+          <div className="profile-details">
+            <h2>{profile.name}</h2>
+            <p>{profile.email}</p>
+
+            {isOwnProfile && (
+              <>
+                <div className="profile-counts">
+                  <span>Followers: {counts.followers}</span>
+                  <span>Following: {counts.following}</span>
+                </div>
+                <div className="profile-upload">
+                  <input type="file" onChange={(e) => setProfileImage(e.target.files[0])} />
+                  <button onClick={handleProfileImageUpload}>Upload Photo</button>
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+
+        {/* CREATE POST */}
+        {isOwnProfile && (
+          <div className="create-post">
+            <input type="file" onChange={(e) => setImage(e.target.files[0])} />
+            <textarea placeholder="Write caption..." value={caption} onChange={(e) => setCaption(e.target.value)} />
+            <button onClick={handleCreatePost}>Post</button>
+          </div>
+        )}
+
+        {/* POSTS */}
+        {posts.map((post) => (
+          <div key={post.id} className="post-card">
+            {/* POST HEADER */}
+            <div className="post-header">
+              <span>{profile.name}</span>
+              {isOwnProfile && (
+                <button className="menu-btn" onClick={() => setDeletePostId(post.id)}>⋮</button>
+              )}
+            </div>
+
+            {post.image && <img src={`http://localhost:5000/uploads/${post.image}`} className="post-img" alt="post" />}
+            {post.caption && <p>{post.caption}</p>}
+
+            {/* ACTIONS */}
+            <div className="post-actions">
+              <button onClick={() => handleLike(post.id, post.isLiked)}>
+                {post.isLiked ? "❤️" : "🤍"} {post.likeCount}
+              </button>
+              <button onClick={() => toggleComments(post.id)}>
+                💬 Comments ({commentsMap[post.id]?.length || 0})
+              </button>
+            </div>
+
+            {/* COMMENTS */}
+            {openComments[post.id] && (
+              <div className="comments-section">
+                {commentsMap[post.id]?.map((c) => (
+                  <div key={c.id} className="comment-item">
+                    <b>{c.name}:</b>{" "}
+                    {editingComment[c.id] ? (
+                      <>
+                        <input
+                          type="text"
+                          value={editTextMap[c.id]}
+                          onChange={(e) => setEditTextMap((prev) => ({ ...prev, [c.id]: e.target.value }))}
+                        />
+                        <button onClick={() => handleEditComment(c.id, post.id)}>💾</button>
+                        <button onClick={() => setEditingComment((prev) => ({ ...prev, [c.id]: false }))}>❌</button>
+                      </>
+                    ) : (
+                      <>
+                        {c.text}
+                        {c.user_id === userId && (
+                          <>
+                            <button onClick={() => setEditingComment((prev) => ({ ...prev, [c.id]: true }))}>✏️</button>
+                            <button onClick={() => handleDeleteComment(c.id, post.id)}>🗑️</button>
+                          </>
+                        )}
+                      </>
+                    )}
+                  </div>
+                ))}
+                <div className="add-comment">
+                  <input
+                    placeholder="Add comment..."
+                    value={commentTextMap[post.id] || ""}
+                    onChange={(e) =>
+                      setCommentTextMap((prev) => ({ ...prev, [post.id]: e.target.value }))
+                    }
+                  />
+                  <button onClick={() => handleAddComment(post.id)}>Post</button>
+                </div>
+              </div>
+            )}
+          </div>
+        ))}
+
+        {/* DELETE POST MODAL */}
+        {deletePostId && (
+          <div className="modal-overlay">
+            <div className="modal-box">
+              <h3>Delete post?</h3>
+              <button className="danger" onClick={handleDeletePost}>Delete</button>
+              <button onClick={() => setDeletePostId(null)}>Cancel</button>
+            </div>
+          </div>
+        )}
+      </div>
+    </MainLayout>
+  );
+};
+
+export default Profile;

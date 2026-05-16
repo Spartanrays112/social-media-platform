@@ -1,0 +1,282 @@
+
+
+.profile-container {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* ================= HEADER ================= */
+
+.profile-header {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #ddd;
+}
+
+.profile-avatar {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background: #eee;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36px;
+  font-weight: bold;
+  overflow: hidden;
+}
+
+.profile-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.profile-details h2 {
+  margin: 0;
+}
+
+.profile-details p {
+  margin: 4px 0;
+  color: #666;
+}
+
+.profile-counts {
+  display: flex;
+  gap: 15px;
+  margin-top: 8px;
+  font-weight: 500;
+}
+
+.profile-upload {
+  margin-top: 10px;
+}
+
+.profile-upload input {
+  margin-bottom: 6px;
+}
+
+/* ================= CREATE POST ================= */
+
+.create-post {
+  margin: 20px 0;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+.create-post textarea {
+  width: 100%;
+  min-height: 80px;
+  margin: 10px 0;
+  padding: 8px;
+  resize: none;
+}
+
+.create-post button {
+  padding: 6px 14px;
+  cursor: pointer;
+}
+
+/* ================= POSTS ================= */
+
+.post-card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  padding: 10px;
+  background: #fff;
+}
+
+.post-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 600;
+  padding-bottom: 6px;
+}
+
+.menu-btn {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.post-img {
+  width: 100%;
+  border-radius: 6px;
+  margin-top: 8px;
+}
+
+.post-actions {
+  display: flex;
+  gap: 15px;
+  margin-top: 8px;
+}
+
+.post-actions button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+/* ================= COMMENTS ================= */
+
+.comments-section {
+  margin-top: 10px;
+  border-top: 1px solid #eee;
+  padding-top: 10px;
+}
+
+.comments-section p {
+  margin: 4px 0;
+  font-size: 14px;
+}
+
+.comments-section input {
+  width: 100%;
+  padding: 6px;
+  margin-top: 6px;
+}
+
+.comments-section button {
+  margin-top: 6px;
+  padding: 4px 10px;
+}
+
+/* ================= MODAL ================= */
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-box {
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  width: 280px;
+  text-align: center;
+}
+
+.modal-box h3 {
+  margin-bottom: 15px;
+}
+
+.modal-box button {
+  padding: 6px 14px;
+  margin: 6px;
+  cursor: pointer;
+}
+
+.modal-box .danger {
+  background: #e53935;
+  color: white;
+  border: none;
+}
+
+/* ===================== */
+/* 📱 MOBILE RESPONSIVE */
+/* ===================== */
+@media (max-width: 768px) {
+
+  .profile-container {
+    padding: 10px;
+    max-width: 100%;
+  }
+
+  /* ===== PROFILE HEADER ===== */
+  .profile-header {
+    gap: 14px;
+    padding-bottom: 15px;
+  }
+
+  .profile-avatar {
+    width: 70px;
+    height: 70px;
+    font-size: 28px;
+  }
+
+  .profile-details h2 {
+    font-size: 18px;
+  }
+
+  .profile-details p {
+    font-size: 13px;
+  }
+
+  .profile-counts {
+    gap: 10px;
+    font-size: 13px;
+    flex-wrap: wrap;
+  }
+
+  /* ===== CREATE POST ===== */
+  .create-post {
+    padding: 12px;
+  }
+
+  .create-post textarea {
+    min-height: 70px;
+    font-size: 14px;
+  }
+
+  /* ===== POST CARD (MATCH HOME) ===== */
+  .post-card {
+    padding: 0;
+    border-radius: 0;              /* IG mobile feel */
+  }
+
+  .post-header {
+    padding: 8px 10px;
+    font-size: 14px;
+  }
+
+  .post-img {
+    border-radius: 0;
+    margin-top: 0;
+    max-height: 400px;
+    object-fit: cover;
+  }
+
+  .post-actions {
+    padding: 8px 10px;
+    gap: 14px;
+    font-size: 13px;
+  }
+
+  /* ===== COMMENTS ===== */
+  .comments-section {
+    padding: 8px 10px;
+  }
+
+  .comments-section p {
+    font-size: 13px;
+  }
+
+  .comments-section input {
+    font-size: 13px;
+  }
+
+  .comments-section button {
+    font-size: 13px;
+    padding: 5px 12px;
+  }
+
+  /* ===== MODAL ===== */
+  .modal-box {
+    width: 90%;
+  }
+}

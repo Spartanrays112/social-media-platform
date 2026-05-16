@@ -1,0 +1,158 @@
+/* =========================================================
+   LEFT SIDEBAR – PROFESSIONAL RESPONSIVE DESIGN
+   ========================================================= */
+
+:root {
+  --sidebar-bg: #ffffff;
+  --sidebar-border: #e4e6eb;
+  --sidebar-hover: #f0f2f5;
+  --sidebar-active: #e4e6eb;
+  --sidebar-text: #050505;
+  --sidebar-muted: #65676b;
+}
+
+/* ================= CONTAINER ================= */
+
+.left-sidebar {
+  position: sticky;
+  top: 60px;
+  height: calc(100vh - 60px);
+
+  display: flex;
+  flex-direction: column;
+
+  background-color: var(--sidebar-bg);
+  border-right: 1px solid var(--sidebar-border);
+
+  padding: 16px;
+  gap: 4px;
+
+  transition: width 0.25s ease, padding 0.25s ease;
+}
+
+/* ================= MENU ITEM ================= */
+
+.sidebar-item {
+  display: flex;
+  align-items: center;
+
+  gap: 14px;
+  padding: 10px 14px;
+
+  border-radius: 10px;
+  cursor: pointer;
+
+  color: var(--sidebar-text);
+  font-size: 15px;
+  font-weight: 500;
+
+  white-space: nowrap;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.sidebar-item:hover {
+  background-color: var(--sidebar-hover);
+}
+
+.sidebar-item.active {
+  background-color: var(--sidebar-active);
+  font-weight: 600;
+}
+
+/* ================= ICON ================= */
+
+.sidebar-icon {
+  font-size: 20px;
+  min-width: 24px;
+  text-align: center;
+}
+
+/* ================= TEXT ================= */
+
+.sidebar-text {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* =========================================================
+   RESPONSIVE BEHAVIOR
+   ========================================================= */
+
+/* -------- LARGE DESKTOP -------- */
+
+@media (min-width: 1200px) {
+  .left-sidebar {
+    width: 260px;
+  }
+}
+
+/* -------- LAPTOP -------- */
+
+@media (max-width: 1199px) {
+  .left-sidebar {
+    width: 220px;
+    padding: 14px;
+  }
+
+  .sidebar-item {
+    padding: 10px 12px;
+  }
+}
+
+/* -------- TABLET -------- */
+
+@media (max-width: 992px) {
+  .left-sidebar {
+    width: 200px;
+    padding: 12px;
+  }
+
+  .sidebar-text {
+    font-size: 14px;
+  }
+}
+
+/* -------- SMALL TABLET -------- */
+
+@media (max-width: 850px) {
+  .left-sidebar {
+    width: 90px;
+    padding: 10px;
+  }
+
+  .sidebar-item {
+    justify-content: center;
+    padding: 12px 0;
+  }
+
+  .sidebar-text {
+    display: none; /* collapse text only */
+  }
+}
+
+/* -------- MOBILE -------- */
+
+@media (max-width: 600px) {
+  .left-sidebar {
+    width: 72px;
+    padding: 8px;
+  }
+
+  .sidebar-icon {
+    font-size: 22px;
+  }
+
+  .sidebar-item {
+    padding: 14px 0;
+    border-radius: 12px;
+  }
+}
+
+/* -------- EXTRA SMALL MOBILE -------- */
+
+@media (max-width: 420px) {
+  .left-sidebar {
+    width: 64px;
+  }
+}

@@ -1,0 +1,45 @@
+.right-sidebar {
+  padding: 10px;
+}
+
+.sidebar-card {
+  background: #fff;
+  padding: 15px;
+  border-radius: 10px;
+  margin-bottom: 15px;
+}
+
+.sidebar-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.follow-btn {
+  background: #0095f6;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.unfollow-btn {
+  background: #eee;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+
+
+/* ===================== */
+/* 📱 MOBILE & TABLET */
+/* ===================== */
+@media (max-width: 1024px) {
+  .right-sidebar {
+    display: none;
+  }
+}

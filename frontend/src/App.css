@@ -1,0 +1,60 @@
+body {
+  font-family: Arial, sans-serif;
+
+  background: #f0f2f5;
+  margin: 0;
+}
+
+.form-container {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+input {
+  display: block;
+  margin: 1rem 0;
+  padding: 0.5rem;
+  width: 100%;
+}
+
+button {
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}
+
+
+body {
+  font-family: Arial, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;          /* ✅ height → min-height */
+  background: #f0f2f5;
+  margin: 0;
+  padding: 10px;              /* ✅ mobile padding */
+}
+
+.form-container {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  width: 100%;
+  max-width: 400px;           /* ✅ prevents overflow */
+}
+
+input {
+  display: block;
+  margin: 1rem 0;
+  padding: 0.6rem;
+  width: 100%;
+  box-sizing: border-box;     /* ✅ important */
+}
+
+button {
+  padding: 0.6rem 1rem;
+  cursor: pointer;
+  width: 100%;                /* ✅ better on mobile */
+}
